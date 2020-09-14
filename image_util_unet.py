@@ -24,8 +24,8 @@ class BaseDataProvider(object):
 
         nx = data.shape[1]
         ny = data.shape[0]
-        print('Data Shape: ',data.shape)
-        print('Label Shape: ',label.shape)
+        #print('Data Shape: ',data.shape)
+        #print('Label Shape: ',label.shape)
         return path, data.reshape(1, self.channels, ny, nx), label.reshape(1, self.channels, ny, nx)
 
     def _process_data_label(self, data, label):
