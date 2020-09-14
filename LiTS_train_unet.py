@@ -7,7 +7,7 @@ from models.models import create_model
 from util.visualizer import Visualizer
 from math import *
 from util import html
-import ipdb
+#import ipdb
 
 
 opt = TrainOptions().parse()
