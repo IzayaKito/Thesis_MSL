@@ -19,8 +19,8 @@ class BaseDataProvider(object):
 
     def _load_data_and_label(self):
         data, label, path = self._next_data()
-        # data, label = self._augment_data(data, label) NO SÉ QUÉ HACE
-        # data, label = self._process_data_label(data, label) NO SÉ QUÉ HACE
+        # data, label = self._augment_data(data, label) QUE HACE?
+        # data, label = self._process_data_label(data, label) QUE HACE?
 
         nx = data.shape[1]
         ny = data.shape[0]
