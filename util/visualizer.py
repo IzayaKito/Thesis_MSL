@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import os
 import ntpath
 import time
-#import ipdb
+import ipdb
 from . import util
 from . import html
 import scipy.ndimage as ndimage

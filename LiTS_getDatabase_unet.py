@@ -6,7 +6,7 @@ from PIL import Image
 from scipy import misc, ndimage
 import os, os.path
 import skimage.io as io
-#import ipdb
+import ipdb
 import matplotlib.pyplot as plt
 from image_util_unet import BaseDataProvider
 from scipy.ndimage.interpolation import rotate
@@ -43,8 +43,8 @@ class DataProvider_LiTS(BaseDataProvider):
 				dataFold[inum] = dataNum
 			dataFile = sorted(dataFold)
 			for islice in range(1, len(dataFile)-1):
-				filePath = os.path.join(foldpath, str(dataFile[islice]) + '.jpg')
-				file = io.imread(filePath)
+				#filePath = os.path.join(foldpath, str(dataFile[islice]) + '.jpg') Not necessary
+				#file = io.imread(filePath) Not necessary
 				#data = file['imdb']['data'][0][0]
 				#label = file['imdb']['labels'][0][0]
 				#if np.amax(data) == 0: continue
