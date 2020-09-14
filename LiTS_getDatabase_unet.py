@@ -6,7 +6,7 @@ from PIL import Image
 from scipy import misc, ndimage
 import os, os.path
 import skimage.io as io
-import ipdb
+#import ipdb
 import matplotlib.pyplot as plt
 from image_util_unet import BaseDataProvider
 from scipy.ndimage.interpolation import rotate
