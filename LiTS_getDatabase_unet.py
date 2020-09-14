@@ -79,7 +79,8 @@ class DataProvider_LiTS(BaseDataProvider):
 		#		labels[:, :, ich] = file['imdb']['labels'][0][0]
 
 		fileName = os.path.join(filePath[0], str(filePath[1]) + '.jpg')
-		data = io.imread(fileName)
+		data = io.imread(fileName,plugin='matplotlib')
+		print('Shape after reading',data.shape)
 		#data = np.clip(data+124, 0, 400)
 		
 		path = filePath[0] + str(filePath[1])
