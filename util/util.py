@@ -45,7 +45,8 @@ def save_image(image_numpy, image_path):
     # image_pil = Image.fromarray(image_numpy)
     # image_pil = Image.fromarray(image_numpy.astype(np.uint8))
     # image_pil.save(image_path)
-    print('save_image')
+    #print('save_image')
+    pass
 
 
 def info(object, spacing=10, collapse=1):
