@@ -105,6 +105,9 @@ class UNetModel(BaseModel):
         img = self.real_A[0].cpu().numpy()
         img = (np.transpose(img, (1, 2, 0)))
 
+        print(out.shape)
+        print(img.shape)
+        
         label = color.label2rgb(out)
         overlay = color.label2rgb(out, img)
         # io.imshow(color.label2rgb(out))
