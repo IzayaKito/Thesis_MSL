@@ -98,15 +98,17 @@ class UNetModel(BaseModel):
 
     def seg2image(self, image):
 
+        print('Before arg: ',image.shape)
         out = torch.argmax(image, 1)
+        print('After arg: ',out.shape)
         out = out.cpu().numpy()
         out = np.squeeze(out)
 
         img = self.real_A[0].cpu().numpy()
         img = (np.transpose(img, (1, 2, 0)))
 
-        print(out.shape)
-        print(img.shape)
+        print('After squeeze',out.shape)
+        print('Image shape',img.shape)
         
         label = color.label2rgb(out)
         overlay = color.label2rgb(out, img)
