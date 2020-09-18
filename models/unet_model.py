@@ -98,22 +98,16 @@ class UNetModel(BaseModel):
 
     def seg2image(self, image):
 
-        print('Before arg: ',image.shape)
-        out = torch.argmax(image, 1)
-        print('After arg: ',out.shape)
+        out = torch.argmax(image, 0)
         out = out.cpu().numpy()
         out = np.squeeze(out)
 
         img = self.real_A[0].cpu().numpy()
         img = (np.transpose(img, (1, 2, 0)))
-
-        print('After squeeze',out.shape)
-        print('Image shape',img.shape)
         
         label = color.label2rgb(out)
         overlay = color.label2rgb(out, img)
-        # io.imshow(color.label2rgb(out))
-        # plt.show()s
+
         return label, overlay
 
     def backward_G(self):
@@ -163,7 +157,7 @@ class UNetModel(BaseModel):
 
         real_A1 = util.tensor2im(self.input_A)
         #real_A1 = util.tensor2im(self.input_A[:, 0])
-        real_A2, real_A3 = self.seg2image(self.fake_B) #creates interesting images
+        real_A2, real_A3 = self.seg2image(self.fake_B[0]) #creates interesting images
         #real_A2 = util.tensor2im(self.input_A[:, 1])
         #real_A3 = util.tensor2im(self.input_A[:, 2])
 
