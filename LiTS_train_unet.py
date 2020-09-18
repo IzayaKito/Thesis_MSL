@@ -12,8 +12,8 @@ import ipdb
 
 opt = TrainOptions().parse()
 
-input_min       = 0
-input_max       = 400
+input_min = 0
+input_max = 400
 
 data_train = DataProvider_LiTS(opt.inputSize, opt.fineSize, opt.segType, opt.semi_rate, opt.input_nc,
                                opt.dataroot, a_min=input_min, a_max=input_max, mode="train")
@@ -41,15 +41,18 @@ for epoch in range(opt.epoch_count, opt.niter + opt.niter_decay + 1):
 
         if step % opt.display_step == 0:
             save_result = step % opt.update_html_freq == 0
-            visualizer.display_current_results(model.get_current_visuals(), epoch, save_result)
+            visualizer.display_current_results(
+                model.get_current_visuals(), epoch, save_result)
 
             errors = model.get_current_errors()
             t = (time.time() - iter_start_time) / opt.batchSize
-            visualizer.print_current_errors(epoch, step, training_iters, errors, t, 'Train')
+            visualizer.print_current_errors(
+                epoch, step, training_iters, errors, t, 'Train')
 
         if step % opt.plot_step == 0:
             if opt.display_id > 0:
-                visualizer.plot_current_errors(epoch, step / float(training_iters), opt, errors)
+                visualizer.plot_current_errors(
+                    epoch, step / float(training_iters), opt, errors)
 
         if total_steps % opt.save_latest_freq == 0:
             print('saving the latest model (epoch %d, total_steps %d)' %

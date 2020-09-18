@@ -24,9 +24,14 @@ class BaseDataProvider(object):
 
         nx = data.shape[1]
         ny = data.shape[0]
+
+        data = np.expand_dims(data, axis=0)
+        data = (np.transpose(data, (0, 3, 1, 2)))
         #print('Data Shape: ',data.shape)
-        #print('Label Shape: ',label.shape)
-        return path, data.reshape(1, self.channels, ny, nx), label.reshape(1, self.channels, ny, nx)
+        # print('Label Shape: ',label.shape)
+
+        # return data.reshape(1, self.channels, ny, nx)
+        return path, data, label.reshape(1, self.channels, ny, nx)
 
     def _process_data_label(self, data, label):
         for ich in range(self.channels):
@@ -48,11 +53,12 @@ class BaseDataProvider(object):
         Y = torch.FloatTensor(n, 1, nx, ny).zero_()
         P = []
 
-        test1 = data[0, 0]
-        rarrg = data.shape[1]
+        #test1 = data[0, 0]
+        #rarrg = data.shape[1]
 
-        for ich in range(data.shape[1]):
-            X[0, ich] = self._toTorchFloatTensor(data[0, ich])[0]
+        X[0] = self._toTorchFloatTensor(data)[0]
+        # for ich in range(data.shape[1]):
+        #    X[0, ich] = self._toTorchFloatTensor(data[0, ich])[0]
         Y[0, 0] = self._toTorchFloatTensor(labels[0, 0])[0]
         P.append(path)
 
@@ -61,8 +67,10 @@ class BaseDataProvider(object):
                 break
             path, data, labels = self._load_data_and_label()
 
-            for ich in range(data.shape[1]):
-                X[i, ich] = self._toTorchFloatTensor(data[0, ich])[0]
+            X[i] = self._toTorchFloatTensor(
+                data)[0]  # check if this is correct
+            # for ich in range(data.shape[1]):
+            #    X[i, ich] = self._toTorchFloatTensor(data[0, ich])[0]
             Y[i, 0] = self._toTorchFloatTensor(labels[0, 0])[0]
             P.append(path)
 

@@ -12,6 +12,11 @@ from . import loss
 import sys
 import ipdb
 
+from skimage import io
+from skimage import color
+from skimage import segmentation
+import matplotlib.pyplot as plt
+
 
 class UNetModel(BaseModel):
     def name(self):
@@ -26,7 +31,7 @@ class UNetModel(BaseModel):
         self.input_B = self.Tensor(nb, int(opt.output_nc/2), size, size).long()
         # load/define networks
         self.net = networks_unet.define_G(opt.input_nc, opt.output_nc,
-                                        opt.ngf, opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type, self.gpu_ids)
+                                          opt.ngf, opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type, self.gpu_ids)
 
         if not self.isTrain or opt.continue_train:
             which_epoch = opt.which_epoch
@@ -42,16 +47,20 @@ class UNetModel(BaseModel):
 
             # initialize optimizers
             if opt.optim == 'Adam':
-                self.optimizer_ = torch.optim.Adam(self.net.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
+                self.optimizer_ = torch.optim.Adam(
+                    self.net.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
             elif opt.optim == 'SGD':
-                self.optimizer_ = torch.optim.SGD(self.net.parameters(), lr=opt.lr)
+                self.optimizer_ = torch.optim.SGD(
+                    self.net.parameters(), lr=opt.lr)
             elif opt.optim == 'RMS':
-                self.optimizer_ = torch.optim.RMSprop(self.net.parameters(), lr=opt.lr)
+                self.optimizer_ = torch.optim.RMSprop(
+                    self.net.parameters(), lr=opt.lr)
             self.optimizers = []
             self.schedulers = []
             self.optimizers.append(self.optimizer_)
             for optimizer in self.optimizers:
-                self.schedulers.append(networks_unet.get_scheduler(optimizer, opt))
+                self.schedulers.append(
+                    networks_unet.get_scheduler(optimizer, opt))
 
         print('---------- Networks initialized -------------')
         networks_unet.print_network(self.net)
@@ -60,8 +69,10 @@ class UNetModel(BaseModel):
     def set_input(self, input):
         input_A = input['A']
         input_B = input['B'].long()
-        self.input_A.resize_(input_A.size()).copy_(input_A) # Resize to fineSize for input A
-        self.input_B.resize_(input_B.size()).copy_(input_B) # Resize to fineSize for input B
+        self.input_A.resize_(input_A.size()).copy_(
+            input_A)  # Resize to fineSize for input A
+        self.input_B.resize_(input_B.size()).copy_(
+            input_B)  # Resize to fineSize for input B
         self.image_paths = input['A_paths']
 
     def set_input_test(self, input):
@@ -85,17 +96,32 @@ class UNetModel(BaseModel):
     def get_image_paths(self):
         return self.image_paths
 
+    def seg2image(self, image):
+
+        out = torch.argmax(image, 1)
+        out = out.cpu().numpy()
+        out = np.squeeze(out)
+
+        img = self.real_A[0].cpu().numpy()
+        img = (np.transpose(img, (1, 2, 0)))
+
+        label = color.label2rgb(out)
+        overlay = color.label2rgb(out, img)
+        # io.imshow(color.label2rgb(out))
+        # plt.show()s
+        return label, overlay
+
     def backward_G(self):
         fake_B = self.net(self.real_A)
         fake_B2 = torch.clamp(fake_B[:, 0:2], 1e-10, 1.0)
-        
+
         loss_C = 0
         numch = 0
         for ibatch in range(self.real_B.shape[0]):
             if torch.max(self.real_B[ibatch, 0]) != 0:
                 realB = self.real_B[ibatch, 0].unsqueeze(0)
                 fakeB = fake_B2[ibatch, :].unsqueeze(0)
-                loss_C += self.criterionCE(fakeB, realB) # * 100
+                loss_C += self.criterionCE(fakeB, realB)  # * 100
                 numch += 1.0
         if numch > 0:
             loss_C = loss_C / numch
@@ -105,13 +131,14 @@ class UNetModel(BaseModel):
             self.loss_C = 0
 
         loss_L = self.criterionLS(fake_B2, self.real_A)
-        loss_A = self.criterionTV(fake_B2) *0.001
+        loss_A = self.criterionTV(fake_B2) * 0.001
         loss_LS = (loss_L + loss_A) * self.opt.lambda_A
-        
+
         loss_tot = loss_C+loss_LS
         loss_tot.backward()
 
-        self.fake_B2= fake_B2.data
+        self.fake_B = fake_B.data
+        self.fake_B2 = fake_B2.data
         self.loss_LS = loss_LS.item()
 
     def optimize_parameters(self):
@@ -126,25 +153,32 @@ class UNetModel(BaseModel):
         return ret_errors
 
     def get_current_visuals(self):
-        real_A1 = util.tensor2im(self.input_A[:, 0])
-        real_A2 = util.tensor2im(self.input_A[:, 1])
-        real_A3 = util.tensor2im(self.input_A[:, 2])
+        test_1 = self.input_A[:, 0]
+        test_2 = self.input_A[:, 1]
+
+        real_A1 = util.tensor2im(self.input_A)
+        #real_A1 = util.tensor2im(self.input_A[:, 0])
+        real_A2, real_A3 = self.seg2image(self.fake_B) #creates interesting images
+        #real_A2 = util.tensor2im(self.input_A[:, 1])
+        #real_A3 = util.tensor2im(self.input_A[:, 2])
 
         real_B2 = util.tensor2im(self.input_B[:, 0])
 
         fake_B0 = util.tensor2im(self.fake_B2[:, 0])
         fake_B1 = util.tensor2im(self.fake_B2[:, 1])
 
-        ret_visuals = OrderedDict([('real_A1', real_A1),('real_A2', real_A2), ('real_A3', real_A3),
+        ret_visuals = OrderedDict([('real_A1', real_A1), ('real_A2', real_A2), ('real_A3', real_A3),
                                    ('real_B2', real_B2), ('fake_B0', fake_B0), ('fake_B1', fake_B1)])
         return ret_visuals
 
     def get_current_data(self):
-        ret_visuals = OrderedDict([('real_A2', self.input_A[:, 1]), ('real_B2', self.input_B[:, 1]), ('fake_B2', self.fake_B2)])
+        ret_visuals = OrderedDict([('real_A2', self.input_A[:, 1]),
+                                   ('real_B2', self.input_B[:, 1]), ('fake_B2', self.fake_B2)])
         return ret_visuals
 
     def get_current_data_seg(self):
-        ret_visuals = OrderedDict([('real_A2', self.input_A[:, 1]), ('fake_B2', self.fake_B2)])
+        ret_visuals = OrderedDict(
+            [('real_A2', self.input_A[:, 1]), ('fake_B2', self.fake_B2)])
 
         return ret_visuals
 
