@@ -55,8 +55,9 @@ class BaseDataProvider(object):
 
         #test1 = data[0, 0]
         #rarrg = data.shape[1]
-
-        X[0] = self._toTorchFloatTensor(data)[0]
+        print(data.shape)
+        print(X[0].shape)
+        X[0] = self._toTorchFloatTensor(data[0])[0]
         # for ich in range(data.shape[1]):
         #    X[0, ich] = self._toTorchFloatTensor(data[0, ich])[0]
         Y[0, 0] = self._toTorchFloatTensor(labels[0, 0])[0]
@@ -67,8 +68,7 @@ class BaseDataProvider(object):
                 break
             path, data, labels = self._load_data_and_label()
 
-            X[i] = self._toTorchFloatTensor(
-                data)[0]  # check if this is correct
+            X[i] = self._toTorchFloatTensor(data[0])[0]  # check if this is correct
             # for ich in range(data.shape[1]):
             #    X[i, ich] = self._toTorchFloatTensor(data[0, ich])[0]
             Y[i, 0] = self._toTorchFloatTensor(labels[0, 0])[0]
