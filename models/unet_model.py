@@ -112,7 +112,7 @@ class UNetModel(BaseModel):
 
     def backward_G(self):
         fake_B = self.net(self.real_A)
-        fake_B2 = torch.clamp(fake_B[:,:], 1e-10, 1.0) #Aquí solo tomaba en cuenta los dos primeros canales
+        fake_B2 = torch.clamp(fake_B[:,:], 1e-10, 1.0) #Aqui solo tomaba en cuenta los dos primeros canales
 
         loss_C = 0
         numch = 0
