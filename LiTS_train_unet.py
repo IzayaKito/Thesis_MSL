@@ -24,7 +24,7 @@ training_iters = int(ceil(data_train.n_data/float(opt.batchSize)))
 total_steps = 0
 model = create_model(opt)
 visualizer = Visualizer(opt)
-
+#TRAINING
 for epoch in range(opt.epoch_count, opt.niter + opt.niter_decay + 1):
     epoch_start_time = time.time()
 
@@ -38,6 +38,7 @@ for epoch in range(opt.epoch_count, opt.niter + opt.niter_decay + 1):
         total_steps += 1
         model.set_input(data)
         model.optimize_parameters()
+        #model.save('latest') just to load model later
 
         if step % opt.display_step == 0:
             save_result = step % opt.update_html_freq == 0
@@ -68,3 +69,4 @@ for epoch in range(opt.epoch_count, opt.niter + opt.niter_decay + 1):
           (epoch, opt.niter + opt.niter_decay, time.time() - epoch_start_time))
 
     model.update_learning_rate()
+#TEST

@@ -87,7 +87,7 @@ class UNetModel(BaseModel):
     def test(self):
         real_A = Variable(self.input_A, volatile=True)
         fake_B = self.net(real_A)
-        fake_B2 = torch.clamp(fake_B[:, 0:2], 1e-10, 1.0)
+        fake_B2 = torch.clamp(fake_B[:,:], 1e-10, 1.0) #Aqui solo tomaba descripcion
 
         self.fake_B2 = fake_B2.data
         self.fake_B = fake_B.data
@@ -112,7 +112,7 @@ class UNetModel(BaseModel):
 
     def backward_G(self):
         fake_B = self.net(self.real_A)
-        fake_B2 = torch.clamp(fake_B[:, 0:2], 1e-10, 1.0)
+        fake_B2 = torch.clamp(fake_B[:,:], 1e-10, 1.0) #Aquí solo tomaba en cuenta los dos primeros canales
 
         loss_C = 0
         numch = 0
@@ -161,10 +161,11 @@ class UNetModel(BaseModel):
         #real_A2 = util.tensor2im(self.input_A[:, 1])
         #real_A3 = util.tensor2im(self.input_A[:, 2])
 
-        real_B2 = util.tensor2im(self.input_B[:, 0])
+        real_B2 = util.tensor2im(self.fake_B2[:, 0])
+        #real_B2 = util.tensor2im(self.input_B[:, 0])
 
-        fake_B0 = util.tensor2im(self.fake_B2[:, 0])
-        fake_B1 = util.tensor2im(self.fake_B2[:, 1])
+        fake_B0 = util.tensor2im(self.fake_B2[:, 1])
+        fake_B1 = util.tensor2im(self.fake_B2[:, 2])
 
         ret_visuals = OrderedDict([('real_A1', real_A1), ('real_A2', real_A2), ('real_A3', real_A3),
                                    ('real_B2', real_B2), ('fake_B0', fake_B0), ('fake_B1', fake_B1)])
