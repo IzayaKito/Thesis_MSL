@@ -11,6 +11,7 @@
             "program": "${workspaceFolder}/LiTS_train_unet.py",
             "args": [
                 "--dataroot","D:\\Universidad\\DATA_TESIS\\dataset",
+                "--continue_train",
                 "--gpu_ids","0",
                 "--name","PUCPAI_subpixelUnet_Adam",
                 "--model","unet",
