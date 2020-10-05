@@ -17,7 +17,6 @@ import cv2
 import itertools
 from util.metrics import *
 import psutil
-import humanize
 import os, time
 import GPUtil as GPU
 import threading

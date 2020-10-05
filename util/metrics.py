@@ -28,14 +28,37 @@ def K_means(image,k):
     return res2gray
 
 def indexArray(image):
-    #Check this function later, not working when classes 4
-    image = Image.fromarray(np.array(image))
-    image = image.quantize(colors=3) #MAX NUMBER OF CLASSES 
-    image = np.array(image)
+    #Values from labels to gray
+    #Unique values 
+    lab_colors = {
+        "blue":[94/255,0,1],
+        "orange":[1,106/255,0],
+        "yellow":[1,238/255,0],
+    }
+    g_conv = [0.2125,0.7154,0.0721]
+    unique_value = []
+    unique_value.append(np.dot(np.array(lab_colors["blue"]),np.array(g_conv)))
+    unique_value.append(np.dot(np.array(lab_colors["orange"]),np.array(g_conv)))
+    unique_value.append(np.dot(np.array(lab_colors["yellow"]),np.array(g_conv)))
+
+    gray_img = rgb2gray(image)
+    unique_gray = np.unique(gray_img)
+
+    for v in unique_gray:
+        if(unique_value[0]-0.01<v<unique_value[0]+0.01):
+            gray_img[gray_img==v] = 0
+        if(unique_value[1]-0.01<v<unique_value[1]+0.01):
+            gray_img[gray_img==v] = 1
+        if(unique_value[2]-0.01<v<unique_value[2]+0.01):
+            gray_img[gray_img==v] = 2
     
-    unicos = np.unique(image)
-    
-    return image
+    unique_colors, count_colors = np.unique(gray_img,return_counts=True)
+    perc = []
+    freq = np.sum(count_colors)
+    for i in count_colors:
+        perc.append((i/freq)*100)
+    assert sum(perc) == 100
+    return gray_img
 
 def getMetrics(prediction,target,unique_values,combinations):
     max_iou = max_dice = max_acu = max_prec = max_rec = 0
