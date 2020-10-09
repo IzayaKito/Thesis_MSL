@@ -85,7 +85,8 @@ if opt.isTrain:
         
 #TEST 
 #Only for one image dataset
-data_dir = "D:/Universidad/DATA_TESIS/dataset/test/0/"
+data_dir = opt.dataroot + "\\test\\0\\"
+print(data_dir)
 data_n = len(os.listdir(data_dir))/2
 
 sum_iou = sum_dice = sum_acu = sum_prec = sum_rec = 0

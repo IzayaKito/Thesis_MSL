@@ -3,7 +3,6 @@ import os
 from util import util
 import torch
 
-
 class BaseOptions():
 	def __init__(self):
 		self.parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -11,6 +10,7 @@ class BaseOptions():
 
 	def initialize(self):
 		self.parser.add_argument('--dataroot', required=True, help='path to images (should have subfolders trainA, trainB, valA, valB, etc)')
+		self.parser.add_argument('--isTrain', type=util.str2bool, default=True, help='True:train, False:validation/test')		
 		self.parser.add_argument('--batchSize', type=int, default=1, help='input batch size')
 		self.parser.add_argument('--inputSize', type=int, default=256, help='input image size')
 		self.parser.add_argument('--loadSize', type=int, default=286, help='scale images to this size')
@@ -41,7 +41,7 @@ class BaseOptions():
 		if not self.initialized:
 			self.initialize()
 		self.opt = self.parser.parse_args()
-		# self.opt.isTrain = self.isTrain   # train or test
+		#self.opt.isTrain = self.isTrain   # train or test
 
 		str_ids = self.opt.gpu_ids.split(',')
 		self.opt.gpu_ids = []

@@ -29,28 +29,28 @@ def K_means(image,k):
 
 def indexArray(image):
     #Values from labels to gray
-    #Unique values 
+    #Unique values
+    #THE SIZE OF THIS LIST SHOULD BE THE SAME SIZE OF THE UNIQUE RECOGNIZED COLORS IN THE IMAGE 
     lab_colors = {
         "blue":[94/255,0,1],
         "orange":[1,106/255,0],
         "yellow":[1,238/255,0],
     }
-    g_conv = [0.2125,0.7154,0.0721]
+    
+    g_conv = [0.2125,0.7154,0.0721] #Values from skimage
     unique_value = []
-    unique_value.append(np.dot(np.array(lab_colors["blue"]),np.array(g_conv)))
-    unique_value.append(np.dot(np.array(lab_colors["orange"]),np.array(g_conv)))
-    unique_value.append(np.dot(np.array(lab_colors["yellow"]),np.array(g_conv)))
-
+    unique_value.append(lab_colors["blue"] @ np.array(g_conv))
+    unique_value.append(lab_colors["orange"] @ np.array(g_conv))
+    unique_value.append(lab_colors["yellow"] @ np.array(g_conv))
+    unique_value = np.array(unique_value)
+    
+    image = image/255
     gray_img = rgb2gray(image)
-    unique_gray = np.unique(gray_img)
 
-    for v in unique_gray:
-        if(unique_value[0]-0.01<v<unique_value[0]+0.01):
-            gray_img[gray_img==v] = 0
-        if(unique_value[1]-0.01<v<unique_value[1]+0.01):
-            gray_img[gray_img==v] = 1
-        if(unique_value[2]-0.01<v<unique_value[2]+0.01):
-            gray_img[gray_img==v] = 2
+    count = 0
+    for v in unique_value:
+        gray_img[gray_img==v]=count
+        count+=1
     
     unique_colors, count_colors = np.unique(gray_img,return_counts=True)
     perc = []
