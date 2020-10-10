@@ -39,9 +39,9 @@ def indexArray(image):
     
     g_conv = [0.2125,0.7154,0.0721] #Values from skimage
     unique_value = []
-    unique_value.append(lab_colors["blue"] @ np.array(g_conv))
-    unique_value.append(lab_colors["orange"] @ np.array(g_conv))
-    unique_value.append(lab_colors["yellow"] @ np.array(g_conv))
+    unique_value.append(np.matmul(lab_colors["blue"],np.array(g_conv)))
+    unique_value.append(np.matmul(lab_colors["orange"],np.array(g_conv)))
+    unique_value.append(np.matmul(lab_colors["yellow"],np.array(g_conv)))
     unique_value = np.array(unique_value)
     
     image = image/255
