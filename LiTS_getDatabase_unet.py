@@ -1,6 +1,5 @@
 from __future__ import print_function, division, absolute_import, unicode_literals
 import scipy.io as sio
-import h5py
 import numpy as np
 from PIL import Image
 from scipy import misc, ndimage
