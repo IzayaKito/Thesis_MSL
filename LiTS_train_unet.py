@@ -35,9 +35,11 @@ training_iters = int(ceil(data_train.n_data/float(opt.batchSize)))
 
 total_steps = 0
 model = create_model(opt)
-visualizer = Visualizer(opt)
+
 #TRAINING
 if opt.isTrain:
+    visualizer = Visualizer(opt)
+    
     for epoch in range(opt.epoch_count, opt.niter + opt.niter_decay + 1):
         epoch_start_time = time.time()
 
@@ -148,7 +150,7 @@ for i in tqdm.tqdm(range(int(data_n))):
     t.do_run=False
     t.join() #end thread
     exect_time_ms = time.time() - start_time
-    ##Add to execution time list
+    # add to execution time list
     results['ext_mscnn'].append(exect_time_ms)
     results['gpu_usage_mscnn'].append(sum(t.GPUListUsage)/len(t.GPUListUsage))
     results['cpu_usage_mscnn'].append(sum(t.CPUListUsage)/len(t.CPUListUsage))
@@ -176,7 +178,7 @@ for i in tqdm.tqdm(range(int(data_n))):
     t.do_run=False
     t.join() #end thread
     exect_time_ms = time.time() - start_time
-    ##Add to execution time list
+    # Add to execution time list
     results['ext_kmean'].append(exect_time_ms)
     results['gpu_usage_kmean'].append(sum(t.GPUListUsage)/len(t.GPUListUsage))
     results['cpu_usage_kmean'].append(sum(t.CPUListUsage)/len(t.CPUListUsage))
