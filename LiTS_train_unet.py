@@ -125,11 +125,14 @@ results = {
 for i in tqdm.tqdm(range(int(data_n))):
     img = io.imread(data_dir + str(i) + '.jpg')
     img_K = cv2.imread(data_dir + str(i) + '.jpg') #FOR K-MEANS, DOESN'T WORK WITHO NORMAL IO.IMREAD
+    img_RGB = cv2.cvtColor(img_K,cv2.COLOR_BGR2RGB)
+    
     img_L = cv2.imread(data_dir + str(i) + '.tiff')
     img_L = cv2.cvtColor(img_L, cv2.COLOR_BGR2RGB)
-    img = img/255
-
-    data = np.expand_dims(img, axis=0)
+    #img = img/255
+    img_RGB = img_RGB/255
+    
+    data = np.expand_dims(img_RGB, axis=0)
     data = (np.transpose(data, (0, 3, 1, 2)))
     data = torch.from_numpy(data.copy())
     data = data.to(device='cuda',dtype=torch.float)
