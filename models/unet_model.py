@@ -61,10 +61,11 @@ class UNetModel(BaseModel):
             for optimizer in self.optimizers:
                 self.schedulers.append(
                     networks_unet.get_scheduler(optimizer, opt))
-
-        print('---------- Networks initialized -------------')
-        networks_unet.print_network(self.net)
-        print('-----------------------------------------------')
+        
+        if(opt.isTrain):
+            print('---------- Networks initialized -------------')
+            networks_unet.print_network(self.net)
+            print('-----------------------------------------------')
 
     def set_input(self, input):
         input_A = input['A']
