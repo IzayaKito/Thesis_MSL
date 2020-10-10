@@ -3,7 +3,7 @@ python LiTS_train_unet.py \
 --isTrain False \
 --dataroot /home/jrengifo/dataset \
 --gpu_ids 0 \
---name PUCPAI_subpixelUnet_Adam \
+--name PUCPIA_subpixelUnet_Adam \
 --model unet \
 --which_model_netG subpixelUnet \
 --init_type xavier \
