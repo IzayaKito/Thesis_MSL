@@ -1,25 +1,25 @@
-import time
-import os
-import numpy as np
-from options.train_options import TrainOptions
-from models.models import create_model
-from util.visualizer import Visualizer
-from math import *
-from util import html
-import ipdb
-#Added imports
-import torch
-import skimage.io as io
-import matplotlib.pyplot as plt
-from skimage import color
-import cv2
 import itertools
-from util.metrics import *
-import psutil
-import os, time
-import GPUtil as GPU
+import os
 import threading
+import time
+from math import *
+
+import cv2
+import GPUtil as GPU
+import ipdb
+import matplotlib.pyplot as plt
+import numpy as np
+import psutil
+import skimage.io as io
+import torch
 import tqdm
+from skimage import color
+
+from models.models import create_model
+from options.train_options import TrainOptions
+from util import html
+from util.metrics import *
+from util.visualizer import Visualizer
 
 opt = TrainOptions().parse()
 

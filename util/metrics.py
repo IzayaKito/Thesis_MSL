@@ -1,9 +1,9 @@
-from PIL import Image  
-import PIL  
-from sklearn.metrics import accuracy_score,jaccard_score,precision_score,recall_score
-import numpy as np
 import cv2
-from skimage.color import rgb2gray,label2rgb
+import numpy as np
+from skimage.color import rgb2gray
+from sklearn.metrics import (accuracy_score, jaccard_score, precision_score,
+                             recall_score)
+
 
 def K_means(image,k):
     

@@ -1,21 +1,19 @@
+import itertools
+import os
+import sys
+from collections import OrderedDict
+
+import ipdb
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
-import os
-from collections import OrderedDict
-from torch.autograd import Variable
-import itertools
 import util.util as util
-from .base_model import BaseModel
-from . import networks_unet
-from .loss import *
-from . import loss
-import sys
-import ipdb
+from skimage import color, io, segmentation
+from torch.autograd import Variable
 
-from skimage import io
-from skimage import color
-from skimage import segmentation
-import matplotlib.pyplot as plt
+from . import loss, networks_unet
+from .base_model import BaseModel
+from .loss import *
 
 
 class UNetModel(BaseModel):

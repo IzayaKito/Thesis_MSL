@@ -1,12 +1,11 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import os
-import ntpath
 import time
-import ipdb
-from . import util
-from . import html
+
+import matplotlib.pyplot as plt
+import numpy as np
 import scipy.ndimage as ndimage
+
+from . import html, util
 
 
 class Visualizer():

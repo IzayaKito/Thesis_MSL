@@ -1,15 +1,6 @@
 import torch
-import torch.nn.functional as F
 import torch.nn as nn
-from torch.autograd import Function, Variable
-from itertools import repeat
-import numpy as np
 
-import torch
-import torch.nn as nn
-import numpy as np
-import torch.nn.functional as F
-from torch.autograd import Variable
 
 class levelsetLoss(nn.Module):
     def __init__(self):
