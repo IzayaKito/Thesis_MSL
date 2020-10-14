@@ -62,6 +62,8 @@ results = {
     'gpu_usage_kmean': [],
     'cpu_usage_kmean': [],
     
+    'iou_ms_class':[],
+    'iou_km_class':[]
 }
 
 for i in tqdm.tqdm(range(int(data_n))):
@@ -103,7 +105,7 @@ for i in tqdm.tqdm(range(int(data_n))):
     combinations = np.array(list(itertools.permutations(range(0,len(values)))))
     
     ground_truth = indexArray(img_L) #convert tiff to array of indices
-    metrics = getMetrics(out,ground_truth,values,combinations)
+    metrics = getMetrics(out+3,ground_truth,values+3,combinations)
     
     #We get K value for K-means for ground-truth
     k = len(np.unique(ground_truth))
@@ -125,13 +127,16 @@ for i in tqdm.tqdm(range(int(data_n))):
     
     values_k = np.unique(kmeans_result).astype(int)
     combinations_k = np.array(list(itertools.permutations(range(0,len(values_k)))))
-    k_metrics = getMetrics(kmeans_result,ground_truth,values_k,combinations_k)
+    k_metrics = getMetrics(kmeans_result+3,ground_truth,values_k+3,combinations_k) # add three to avoid overlapping combinations
     
     sum_iou+=metrics["iou"]
     sum_dice+=metrics["dice"]
     sum_acu+=metrics["acu"]
     sum_prec+=metrics["prec"]
     sum_rec+=metrics["rec"]
+    
+    results["iou_ms_class"].append(metrics["iou_class"])
+    results["iou_km_class"].append(k_metrics["iou_class"])
     
     sum_iouK+=k_metrics["iou"]
     sum_diceK+=k_metrics["dice"]
@@ -143,6 +148,10 @@ for i in tqdm.tqdm(range(int(data_n))):
     #label = color.label2rgb(out)
     #plt.imshow(label)
     #plt.show()
+ms_pc_values = np.array(results["iou_ms_class"])
+km_values = np.array(results["iou_km_class"])
+print("MSCnn per class:",np.mean(ms_pc_values,axis=0))    
+print("MSCnn per class:",np.mean(km_values,axis=0))    
 
 print('MSCnn iou: ',sum_iou/data_n)
 print('MSCnn dice: ',sum_dice/data_n)

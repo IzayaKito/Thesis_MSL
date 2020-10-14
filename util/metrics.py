@@ -4,14 +4,13 @@ from skimage.color import rgb2gray
 from sklearn.metrics import (accuracy_score, jaccard_score, precision_score,
                              recall_score)
 
-
 def K_means(image,k):
     
     img=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
     vectorized = img.reshape((-1,3))
     vectorized = np.float32(vectorized)
-    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 1.0)
-    attempts=100
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 1, 1.0)
+    attempts=1
     ret,label,center=cv2.kmeans(vectorized,k,None,criteria,attempts,cv2.KMEANS_PP_CENTERS)
     center = np.uint8(center)
     res = center[label.flatten()]
@@ -73,6 +72,8 @@ def getMetrics(prediction,target,unique_values,combinations):
 
         iou =  jaccard_score(auxPred.flatten(), target.flatten(),average=None)
         dice = np.divide(2*iou,1+iou)
+        
+        iou_c = iou
 
         iouf = jaccard_score(auxPred.flatten(), target.flatten(), average='macro')
         dicef = dice.mean()
@@ -86,12 +87,14 @@ def getMetrics(prediction,target,unique_values,combinations):
             max_acu = acuf
             max_prec = precf
             max_rec = recf
+            max_iou_c = iou_c
     
     metrics = {
         "iou":max_iou,
         "dice":max_dice,
         "acu":max_acu,
         "prec":max_prec,
-        "rec":max_rec
+        "rec":max_rec,
+        "iou_class":max_iou_c
     }
     return metrics
