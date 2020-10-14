@@ -12,12 +12,12 @@ from image_util_unet import BaseDataProvider
 from scipy.ndimage.interpolation import rotate
 
 
-class DataProvider_LiTS(BaseDataProvider):
+class DataProvider(BaseDataProvider):
 
     #n_class = 2
 
     def __init__(self, inputSize, fineSize, segtype, semi_rate, input_nc, path, a_min=0, a_max=100, mode=None):
-        super(DataProvider_LiTS, self).__init__(a_min, a_max)
+        super(DataProvider, self).__init__(a_min, a_max)
         self.nx = inputSize
         self.ny = inputSize
         self.nx_f = fineSize

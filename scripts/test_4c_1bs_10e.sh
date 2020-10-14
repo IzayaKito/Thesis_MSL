@@ -1,4 +1,4 @@
-python LiTS_train_unet.py \
+python test_unet.py \
 --continue_train \
 --isTrain False \
 --dataroot /home/jrengifo/dataset \
