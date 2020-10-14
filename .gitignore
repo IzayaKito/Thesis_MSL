@@ -70,4 +70,4 @@ target/
 .ionide
 
 #Checkpoints
-.checkpoints/*
+checkpoints/

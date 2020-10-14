@@ -26,4 +26,4 @@ python test_unet.py \
 --display_port 8097 \
 --segType tumor \
 --lambda_A 0.000001 \
---checkpoints_dir ./checkpoints/LiTS_Tumor_semi 
+--checkpoints_dir ./checkpoints/test_4c_1bs_10e

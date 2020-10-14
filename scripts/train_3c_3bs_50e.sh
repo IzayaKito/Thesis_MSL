@@ -16,7 +16,7 @@ python train_unet.py \
 --inputSize 512 \
 --fineSize 256 \
 --input_nc 3 \
---output_nc 4 \
+--output_nc 3 \
 --niter 50 \
 --display_step 5 \
 --plot_step 100 \
@@ -24,4 +24,4 @@ python train_unet.py \
 --display_port 8097 \
 --segType tumor \
 --lambda_A 0.000001 \
---checkpoints_dir ./checkpoints/train_4c_3bs_50e
+--checkpoints_dir ./checkpoints/train_3c_3bs_50e
