@@ -111,7 +111,8 @@ def define_G(input_nc, output_nc, ngf, which_model_netG, norm='batch', use_dropo
     norm_layer = get_norm_layer(norm_type=norm)
 
     if use_gpu:
-        assert (torch.cuda.is_available())
+        print('Use CPU')
+        #assert (torch.cuda.is_available())
     if which_model_netG == 'subpixelUnet':
         netG = SubpixelUnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout,
                                      gpu_ids=gpu_ids)
