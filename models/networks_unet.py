@@ -122,7 +122,8 @@ def define_G(input_nc, output_nc, ngf, which_model_netG, norm='batch', use_dropo
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % which_model_netG)
     if len(gpu_ids) > 0:
-        netG.cuda(gpu_ids[0])
+        print('Using CPU')
+        #netG.cuda(gpu_ids[0])
     init_weights(netG, init_type=init_type)
     return netG
 
