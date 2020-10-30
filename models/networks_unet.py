@@ -160,7 +160,7 @@ class SubpixelUnetGenerator(nn.Module):
         self.model = unet_block
 
     def forward(self, input):
-        if self.gpu_ids and isinstance(input.data, torch.cuda.FloatTensor):
+        if self.gpu_ids and isinstance(input.data, torch.FloatTensor):
             return nn.parallel.data_parallel(self.model, input, self.gpu_ids)
         else:
             return self.model(input)
@@ -185,7 +185,7 @@ class unSubpixelPool(nn.Module):
         self.output_nc = int(input_nc/4)
 
     def forward(self, input):
-        output = Variable(torch.cuda.FloatTensor(input.shape[0], self.output_nc, input.shape[2]*2, input.shape[3]*2).zero_())
+        output = Variable(torch.FloatTensor(input.shape[0], self.output_nc, input.shape[2]*2, input.shape[3]*2).zero_())
         output[:, :, ::2, ::2] = input[:, :int(self.input_nc/4), :, :]
         output[:, :, ::2, 1::2] = input[:, int(self.input_nc/4):int(self.input_nc/2), :, :]
         output[:, :, 1::2, ::2] = input[:, int(self.input_nc/2):int(self.input_nc*3/4), :, :]
@@ -286,7 +286,7 @@ class OriginalUnetGenerator(nn.Module):
         self.model = unet_block
 
     def forward(self, input):
-        if self.gpu_ids and isinstance(input.data, torch.cuda.FloatTensor):
+        if self.gpu_ids and isinstance(input.data, torch.FloatTensor):
             return nn.parallel.data_parallel(self.model, input, self.gpu_ids)
         else:
             return self.model(input)
