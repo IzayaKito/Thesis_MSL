@@ -1,5 +1,7 @@
 python app.py \
 --dataroot /home/jrengifo/dataset \
+--continue_train \
+--isTrain False \
 --gpu_ids 0 \
 --name PUCPIA_subpixelUnet_Adam \
 --model unet \
