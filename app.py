@@ -22,7 +22,9 @@ storage = firebase.storage()
 app = Flask(__name__)
 CORS(app)
 
-opt = TrainOptions().parse()
+#opt = TrainOptions().parse()
+#util.save_object(opt,'opt.pkl')
+opt = util.read_object('opt.pkl')
 model = create_model(opt)
 
 
