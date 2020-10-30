@@ -72,5 +72,5 @@ target/
 
 #Checkpoints
 checkpoints/
-scripts/
+static/
 credentials.json
