@@ -105,7 +105,7 @@ for i in tqdm.tqdm(range(int(data_n))):
     combinations = np.array(list(itertools.permutations(range(0,len(values)))))
     
     ground_truth = indexArray(img_L) #convert tiff to array of indices
-    metrics = getMetrics(out+3,ground_truth,values+3,combinations)
+    metrics,actual_gtms = getMetrics(out+3,ground_truth,values+3,combinations)
     
     #We get K value for K-means for ground-truth
     k = len(np.unique(ground_truth))
@@ -127,7 +127,7 @@ for i in tqdm.tqdm(range(int(data_n))):
     
     values_k = np.unique(kmeans_result).astype(int)
     combinations_k = np.array(list(itertools.permutations(range(0,len(values_k)))))
-    k_metrics = getMetrics(kmeans_result+3,ground_truth,values_k+3,combinations_k) # add three to avoid overlapping combinations
+    k_metrics,actual_gtkm = getMetrics(kmeans_result+3,ground_truth,values_k+3,combinations_k) # add three to avoid overlapping combinations
     
     sum_iou+=metrics["iou"]
     sum_dice+=metrics["dice"]
@@ -144,10 +144,11 @@ for i in tqdm.tqdm(range(int(data_n))):
     sum_precK+=k_metrics["prec"]
     sum_recK+=k_metrics["rec"]
     
-    #IF WE WANT TO PRINT THE PREDICTION LABEL
-    #label = color.label2rgb(out)
-    #plt.imshow(label)
-    #plt.show()
+    #plt.imsave("D:\\Universidad\\DATA_TESIS\\Resultados\\original" + str(i) + '.jpg',img_RGB)
+    #plt.imsave("D:\\Universidad\\DATA_TESIS\\Resultados\\predMS" + str(i) + '.jpg',color.label2rgb(actual_gtms,colors=[[94/255,0,1],[1,106/255,0],[1,238/255,0]]))
+    #plt.imsave("D:\\Universidad\\DATA_TESIS\\Resultados\\predKm" + str(i) + '.jpg',color.label2rgb(actual_gtkm,colors=[[1,106/255,0],[94/255,0,1],[1,238/255,0]]))
+    #plt.imsave("D:\\Universidad\\DATA_TESIS\\Resultados\\gtruth" + str(i) + '.jpg',color.label2rgb(ground_truth,colors=[[94/255,0,1],[1,106/255,0],[1,238/255,0]]))
+    
 ms_pc_values = np.array(results["iou_ms_class"])
 km_values = np.array(results["iou_km_class"])
 print("MSCnn per class:",np.mean(ms_pc_values,axis=0))    

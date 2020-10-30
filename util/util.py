@@ -5,11 +5,14 @@ import collections
 import inspect
 import os
 import re
+import io
+import torchvision.transforms as transforms
 
 import numpy as np
 import torch
 from PIL import Image
-
+from skimage import color
+import matplotlib.pyplot as plt
 # Converts a Tensor into a Numpy array
 # |imtype|: the desired type of the converted numpy array
 
@@ -46,7 +49,7 @@ def save_image(image_numpy, image_path):
     # image_pil = Image.fromarray(image_numpy)
     # image_pil = Image.fromarray(image_numpy.astype(np.uint8))
     # image_pil.save(image_path)
-    #print('save_image')
+    # print('save_image')
     pass
 
 
@@ -91,12 +94,48 @@ def mkdir(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
+
 def str2bool(v):
-	if isinstance(v, bool):
-		return v
-	if v.lower() in ('yes', 'true', 't', 'y', '1'):
-		return True
-	elif v.lower() in ('no', 'false', 'f', 'n', '0'):
-		return False
-	else:
-		raise argparse.ArgumentTypeError('Boolean value expected.')
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
+
+def transform_image(image_bytes):
+    my_transforms = transforms.Compose([transforms.Resize(512),
+                                        transforms.CenterCrop(512),
+                                        transforms.ToTensor()])
+    image = Image.open(io.BytesIO(image_bytes))
+    return my_transforms(image).unsqueeze(0)
+
+
+def get_prediction(image_bytes, model):
+    tensor = transform_image(image_bytes)
+    tensor = tensor.to(device='cuda', dtype=torch.float)
+    print(tensor.size)
+
+    with torch.no_grad():
+        prediction = model.net(tensor)
+
+    out = torch.argmax(prediction, 1)  # Index array of prediction
+    out = out.cpu().numpy()
+    out = np.squeeze(out)
+
+    image = color.label2rgb(
+        out, colors=[[1, 238/255, 0], [1, 106/255, 0], [94/255, 0, 1]])
+    return image
+
+
+def saveImageStatic(app_root, filename, image):
+    plt.imsave(os.path.join(app_root, "static/" +
+                            filename), image)
+
+
+def deleteImageStatic(app_root, filename):
+    os.remove(os.path.join(app_root, "static/" +
+                           filename))
