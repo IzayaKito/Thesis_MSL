@@ -13,6 +13,7 @@ import torch
 from PIL import Image
 from skimage import color
 import matplotlib.pyplot as plt
+import pickle
 # Converts a Tensor into a Numpy array
 # |imtype|: the desired type of the converted numpy array
 
@@ -139,3 +140,12 @@ def saveImageStatic(app_root, filename, image):
 def deleteImageStatic(app_root, filename):
     os.remove(os.path.join(app_root, "static/" +
                            filename))
+
+def save_object(obj, filename):
+    with open(filename, 'wb') as output:  # Overwrites any existing file.
+        pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
+
+def read_object(filename):
+    with open(filename, 'rb') as input:
+        obj = pickle.load(input)
+    return obj
