@@ -117,7 +117,7 @@ def transform_image(image_bytes):
 
 def get_prediction(image_bytes, model):
     tensor = transform_image(image_bytes)
-    tensor = tensor.to(device='cuda', dtype=torch.float)
+    tensor = tensor.to(device='cpu', dtype=torch.float)
     print(tensor.size)
 
     with torch.no_grad():

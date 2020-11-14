@@ -162,10 +162,7 @@ class SubpixelUnetGenerator(nn.Module):
         self.model = unet_block
 
     def forward(self, input):
-        if self.gpu_ids and isinstance(input.data, torch.FloatTensor):
-            return nn.parallel.data_parallel(self.model, input, self.gpu_ids)
-        else:
-            return self.model(input)
+    	return self.model(input)
 
 class subpixelPool(nn.Module):
     def __init__(self, input_nc):
@@ -288,10 +285,7 @@ class OriginalUnetGenerator(nn.Module):
         self.model = unet_block
 
     def forward(self, input):
-        if self.gpu_ids and isinstance(input.data, torch.FloatTensor):
-            return nn.parallel.data_parallel(self.model, input, self.gpu_ids)
-        else:
-            return self.model(input)
+    	return self.model(input)
 
 
 class OriginalUnetSkipConnectionBlock(nn.Module):

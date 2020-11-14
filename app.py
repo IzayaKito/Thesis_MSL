@@ -1,4 +1,5 @@
-from flask_cors import CORS
+
+from flask_cors import CORS, cross_origin
 from models.models import create_model
 from options.train_options import TrainOptions
 from flask import Flask, request
@@ -13,15 +14,15 @@ firebaseConfig = {
     "databaseURL": "https://mfcnn-storage.firebaseio.com",
     "projectId": "mfcnn-storage",
     "storageBucket": "mfcnn-storage.appspot.com",
-    "serviceAccount": "D:/Universidad/DATA_TESIS/CNN_MumfordShah_Loss/credentials.json"
+    "serviceAccount": "/home/ubuntu/Thesis_MSL/credentials.json"
 }
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 storage = firebase.storage()
 
 app = Flask(__name__)
-#CORS(app)
-
+CORS(app, resources={r"/api/*": {"origins": "*"}})
+	
 #opt = TrainOptions().parse()
 #util.save_object(opt,'opt.pkl')
 opt = util.read_object('opt.pkl')
@@ -29,6 +30,7 @@ model = create_model(opt)
 
 
 @app.route('/predict', methods=['POST'])
+@cross_origin()
 def predict():
     if request.method == 'POST':
         file = request.files['file']
@@ -52,6 +54,7 @@ def predict():
 
 
 @app.route('/result/list', methods=['GET'])
+@cross_origin()
 def listResults():
     if request.method == 'GET':
         files = storage.list_files()
@@ -74,6 +77,7 @@ def listResults():
 
 
 @app.route('/result', methods=['GET'])
+@cross_origin()
 def getImage():
     if request.method == 'GET':
         img = request.args.get('img')
@@ -86,6 +90,7 @@ def getImage():
 
 
 @app.route('/result/delete', methods=['DELETE'])
+@cross_origin()
 def deleteImage():
     if request.method == 'DELETE':
         img = request.args.get('img')
@@ -98,4 +103,4 @@ def deleteImage():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8000)
+    app.run(host='0.0.0.0', port=8080)
